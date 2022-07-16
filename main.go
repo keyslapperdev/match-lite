@@ -1,18 +1,18 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/name-schema/match-lite/store"
+	"github.com/name-schema/match-lite/types"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	store := store.NewMemoryStore()
 
+	r := gin.Default()
+	r.POST("/student", AddStudent(store))
+	r.GET("/", func(ctx *gin.Context) {
+		store.Get(types.StudentKey)
+	})
 	r.Run()
 }
